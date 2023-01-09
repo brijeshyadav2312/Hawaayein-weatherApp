@@ -11,7 +11,7 @@ const Main = () => {
   const [cityDetails,setCityDetails] = useState([])
   const [dataWeather,setDataWeather] = useState([])
   const [windData,setWindData] = useState([]);
-  const APP_KEY= "35acd0e7fc9e307eee4ba4604215e173";
+  const APP_KEY= "35acd0e7fc9e307eee4ba460";
   useEffect(() =>{
     (async _ => {
           const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&APPID=${APP_KEY}&units=metric&lang=${lang?('en'):('hi')}`);
