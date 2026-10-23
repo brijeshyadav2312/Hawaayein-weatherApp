@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import {
+  WEATHER_CODES,
   formatDayLabel,
   formatPressure,
   formatTempValue,
@@ -55,6 +56,17 @@ describe('weather descriptors', () => {
     expect(getWeatherInfo(0, false)).toMatchObject({ label: 'Clear sky', icon: 'clear', theme: 'clear-night' })
     expect(getWeatherInfo(95, true)).toMatchObject({ label: 'Thunderstorm', theme: 'storm' })
     expect(getWeatherInfo(71, true)).toMatchObject({ label: 'Slight snow', theme: 'snow' })
+  })
+
+  test('maps every WMO code to valid meteocon slugs for day and night', () => {
+    Object.keys(WEATHER_CODES).forEach((code) => {
+      const dayInfo = getWeatherInfo(code, true)
+      const nightInfo = getWeatherInfo(code, false)
+      expect(dayInfo.meteocon).toBeTruthy()
+      expect(nightInfo.meteocon).toBeTruthy()
+      expect(typeof dayInfo.meteocon).toBe('string')
+      expect(typeof nightInfo.meteocon).toBe('string')
+    })
   })
 
   test('maps AQI, UV, and wind direction', () => {
