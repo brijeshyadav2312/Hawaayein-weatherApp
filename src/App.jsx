@@ -1,10 +1,7 @@
-import Main from './components/Main'
+import WeatherApp from './components/WeatherApp'
+
 function App() {
-  return (
-    <div className="App">
-      <Main/>
-    </div>
-  );
+  return <WeatherApp />
 }
 
-export default App;
+export default App

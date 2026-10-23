@@ -1,6 +1,7 @@
 {
   "short_name": "Hawaayein",
-  "name": "Hawaayein Weather App",
+  "name": "Hawaayein — Weather, in motion",
+  "description": "Current conditions, hourly and 7-day forecasts, air quality, UV, and wind details.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,20 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any"
     }
   ],
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#04080f",
+  "background_color": "#04080f",
+  "categories": ["weather", "utilities"]
 }
