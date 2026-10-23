@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { fetchAirQuality, fetchWeather } from '../lib/weather'
+import { clearLocationCache, fetchAirQuality, fetchWeather } from '../lib/weather'
 
 export function useWeather(location) {
   const [weather, setWeather] = useState(null)
@@ -32,6 +32,7 @@ export function useWeather(location) {
     setError(null)
 
     const load = async () => {
+      const startedAt = Date.now()
       const airPromise = fetchAirQuality({
         latitude: location.latitude,
         longitude: location.longitude,
@@ -46,6 +47,14 @@ export function useWeather(location) {
         })
 
         const air = await airPromise
+
+        if (controller.signal.aborted) return
+
+        // Provide tactile feedback on refresh so user sees the progress indicator
+        const elapsed = Date.now() - startedAt
+        if (hasData.current && elapsed < 450) {
+          await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
+        }
 
         if (controller.signal.aborted) return
 
@@ -71,8 +80,10 @@ export function useWeather(location) {
   }, [location.latitude, location.longitude, locationKey, refreshToken])
 
   const refresh = useCallback(() => {
+    clearLocationCache(location.latitude, location.longitude)
+    setIsRefreshing(true)
     setRefreshToken((token) => token + 1)
-  }, [])
+  }, [location.latitude, location.longitude])
 
   return {
     weather,

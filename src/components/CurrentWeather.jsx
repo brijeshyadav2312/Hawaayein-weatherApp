@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, MapPin, RefreshCw, Umbrella, Wind } from 'lucide-react'
 import {
+  formatClockTime,
   formatTemp,
   formatTempValue,
   formatWind,
@@ -7,7 +8,14 @@ import {
 } from '../lib/format'
 import WeatherIcon from './WeatherIcon'
 
-export default function CurrentWeather({ view, location, units, onRefresh, isRefreshing }) {
+export default function CurrentWeather({
+  view,
+  location,
+  units,
+  onRefresh,
+  isRefreshing,
+  lastUpdated,
+}) {
   const region = [location.admin1, location.country].filter(Boolean).join(', ')
   const locationMeta = region || 'Based on your device'
   const wind = formatWind(view.current.windSpeed, units)
@@ -41,6 +49,7 @@ export default function CurrentWeather({ view, location, units, onRefresh, isRef
             className="hero-weather-icon"
             isDay={view.info.isDay}
             size={170}
+            slug={view.info.meteocon}
             strokeWidth={1.1}
             type={view.info.icon}
           />
@@ -81,15 +90,22 @@ export default function CurrentWeather({ view, location, units, onRefresh, isRef
           className="refresh-button"
           disabled={isRefreshing}
           onClick={onRefresh}
+          title="Refresh forecast"
           type="button"
         >
           <RefreshCw aria-hidden="true" className={isRefreshing ? 'spin' : ''} size={15} />
-          {isRefreshing ? 'Updating' : 'Refresh'}
+          <span>{isRefreshing ? 'Updating…' : 'Refresh'}</span>
         </button>
       </div>
 
-      <p className="updated-line">
-        As of {view.updatedLabel} <span aria-hidden="true">·</span> {view.timezoneOffset}
+      <p className="updated-line" role="status">
+        {isRefreshing
+          ? 'Updating forecast…'
+          : lastUpdated
+            ? `Updated ${formatClockTime(lastUpdated)}`
+            : `As of ${view.updatedLabel}`}
+        <span aria-hidden="true"> · </span>
+        {view.timezoneOffset}
       </p>
     </article>
   )

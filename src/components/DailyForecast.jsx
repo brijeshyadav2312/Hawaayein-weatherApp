@@ -40,7 +40,7 @@ export default function DailyForecast({ days, units, weekLow, weekHigh }) {
                 <small>{formatShortDate(day.date)}</small>
               </span>
 
-              <WeatherIcon isDay type={info.icon} size={23} />
+              <WeatherIcon isDay size={30} slug={info.meteocon} type={info.icon} />
 
               <span className="day-rain">
                 <Droplets aria-hidden="true" size={12} />

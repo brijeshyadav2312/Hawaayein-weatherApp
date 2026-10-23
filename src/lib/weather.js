@@ -54,6 +54,25 @@ function cacheKey(kind, latitude, longitude) {
   return `hawaayein:${kind}:${Number(latitude).toFixed(2)},${Number(longitude).toFixed(2)}`
 }
 
+export function clearLocationCache(latitude, longitude) {
+  const keys = [
+    cacheKey('forecast', latitude, longitude),
+    cacheKey('air', latitude, longitude),
+  ]
+
+  keys.forEach((key) => {
+    cache.delete(key)
+
+    try {
+      sessionStorage.removeItem(key)
+    } catch {
+      return null
+    }
+  })
+
+  return true
+}
+
 function readCache(key) {
   const memoryEntry = cache.get(key)
   if (memoryEntry && Date.now() - memoryEntry.savedAt < CACHE_TTL) {

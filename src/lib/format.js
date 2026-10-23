@@ -1,3 +1,5 @@
+import { getMeteoconSlug } from './weatherIcons'
+
 export const WEATHER_CODES = {
   0: { label: 'Clear sky', icon: 'clear' },
   1: { label: 'Mainly clear', icon: 'partly' },
@@ -62,6 +64,16 @@ export function formatHour(value) {
 
   const suffix = parts.hour >= 12 ? 'PM' : 'AM'
   return `${parts.hour % 12 || 12} ${suffix}`
+}
+
+export function formatClockTime(value) {
+  const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(date)
 }
 
 export function formatDayLabel(date, index) {
@@ -247,6 +259,7 @@ export function getWeatherInfo(code, isDay = true) {
     ...info,
     code: numericCode,
     isDay: daytime,
+    meteocon: getMeteoconSlug(numericCode, daytime),
     theme,
   }
 }

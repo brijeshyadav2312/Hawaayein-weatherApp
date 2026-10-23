@@ -1,5 +1,3 @@
-import { Sparkles } from 'lucide-react'
-
 function pollutant(value) {
   return Number.isFinite(value) ? Math.round(value) : '—'
 }
@@ -23,9 +21,6 @@ export default function AirQualityCard({ airQuality }) {
           <p className="eyebrow">Air quality</p>
           <h2 id="air-quality-heading">Breathing easy?</h2>
         </div>
-        <span className="panel-icon">
-          <Sparkles aria-hidden="true" size={18} />
-        </span>
       </div>
 
       {Number.isFinite(value) ? (

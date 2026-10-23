@@ -195,3 +195,32 @@ test('shows a recoverable error state when the forecast request fails', async ()
   expect(await screen.findByRole('heading', { name: /we lost the wind/i })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
 })
+
+test('renders meteocon animated icons and no sparkles on air quality card', async () => {
+  const { container } = render(<App />)
+
+  await screen.findByRole('heading', { name: 'Noida' })
+
+  // Verify meteocon img elements are rendered
+  const meteocons = container.querySelectorAll('img.meteocon-icon')
+  expect(meteocons.length).toBeGreaterThan(0)
+
+  // Verify air quality panel does not contain sparkles or panel-icon
+  const airPanel = container.querySelector('.air-panel')
+  expect(airPanel).toBeInTheDocument()
+  expect(airPanel.querySelector('.panel-icon')).toBeNull()
+})
+
+test('triggers refresh button smoothly', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await screen.findByRole('heading', { name: 'Noida' })
+
+  const refreshBtn = screen.getByRole('button', { name: /refresh weather/i })
+  expect(refreshBtn).toBeInTheDocument()
+
+  await user.click(refreshBtn)
+  expect(screen.getByRole('button', { name: /refresh weather/i })).toBeInTheDocument()
+})
+

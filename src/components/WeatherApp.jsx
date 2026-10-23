@@ -19,7 +19,8 @@ export default function WeatherApp() {
   const [units, setUnits] = useState(loadUnits)
   const [isLocating, setIsLocating] = useState(false)
   const [notice, setNotice] = useState('')
-  const { weather, airQuality, isLoading, isRefreshing, error, refresh } = useWeather(location)
+  const { weather, airQuality, isLoading, isRefreshing, error, lastUpdated, refresh } =
+    useWeather(location)
   const view = useMemo(
     () => (weather ? buildWeatherView(weather, airQuality) : null),
     [weather, airQuality]
@@ -95,18 +96,16 @@ export default function WeatherApp() {
 
       <header className="topbar">
         <div className="topbar-inner">
-          <a className="brand" href="./" aria-label="Hawaayein home">
-            <span className="brand-mark">
-              <Wind aria-hidden="true" size={21} />
-            </span>
-            <span className="brand-copy">
-              <strong>Hawaayein</strong>
-              <small>Weather, in motion.</small>
-            </span>
-          </a>
-
-          <div className="topbar-controls">
-            <SearchBar onSelect={handleSelect} />
+          <div className="topbar-head">
+            <a className="brand" href="./" aria-label="Hawaayein home">
+              <span className="brand-mark">
+                <Wind aria-hidden="true" size={21} />
+              </span>
+              <span className="brand-copy">
+                <strong>Hawaayein</strong>
+                <small>Weather, in motion.</small>
+              </span>
+            </a>
 
             <div className="quick-actions">
               <button
@@ -129,6 +128,7 @@ export default function WeatherApp() {
                 aria-label={`Switch to ${units === 'metric' ? 'Fahrenheit' : 'Celsius'}`}
                 className="unit-toggle"
                 onClick={() => setUnits((current) => (current === 'metric' ? 'imperial' : 'metric'))}
+                title={`Switch to ${units === 'metric' ? 'Fahrenheit' : 'Celsius'}`}
                 type="button"
               >
                 <span className={units === 'metric' ? 'is-active' : ''}>°C</span>
@@ -139,6 +139,8 @@ export default function WeatherApp() {
               </button>
             </div>
           </div>
+
+          <SearchBar onSelect={handleSelect} />
         </div>
       </header>
 
@@ -172,6 +174,7 @@ export default function WeatherApp() {
             <div className="dashboard-grid">
               <CurrentWeather
                 isRefreshing={isRefreshing}
+                lastUpdated={lastUpdated}
                 location={location}
                 onRefresh={refresh}
                 units={units}

@@ -77,6 +77,20 @@ svg {
   display: block;
 }
 
+.weather-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+img.weather-icon,
+img.meteocon-icon {
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
 ::selection {
   background: rgb(var(--accent-rgb, 251 191 36) / 0.35);
   color: #fff;
@@ -108,11 +122,14 @@ svg {
   --accent-2: #38bdf8;
   --accent-2-rgb: 56 189 248;
   --sun: #fbbf24;
+  --tint-rgb: 255 255 255;
+  --topbar-bg: rgb(4 8 15 / 0.58);
   position: relative;
   isolation: isolate;
   min-height: 100dvh;
   overflow: clip;
   background: #04080f;
+  color-scheme: dark;
 }
 
 .weather-app[data-theme='clear-day'] {
@@ -195,6 +212,8 @@ svg {
   --accent-2-rgb: 148 163 184;
 }
 
+
+
 .weather-app::before {
   content: '';
   position: fixed;
@@ -214,7 +233,7 @@ svg {
   z-index: -2;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 24%),
+    linear-gradient(180deg, rgb(var(--tint-rgb) / 0.025), transparent 24%),
     radial-gradient(80% 60% at 50% 100%, rgb(0 0 0 / 0.28), transparent 70%);
 }
 
@@ -258,7 +277,7 @@ svg {
   background-image: repeating-linear-gradient(
     115deg,
     transparent 0 70px,
-    rgb(255 255 255 / 0.18) 70px 71px,
+    rgb(var(--tint-rgb) / 0.18) 70px 71px,
     transparent 71px 150px
   );
   mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 72%, transparent);
@@ -289,23 +308,30 @@ svg {
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid rgb(255 255 255 / 0.07);
-  background: rgb(4 8 15 / 0.58);
+  border-bottom: 1px solid rgb(var(--tint-rgb) / 0.07);
+  background: var(--topbar-bg);
   backdrop-filter: blur(22px);
 }
 
 .topbar-inner {
-  display: flex;
+  display: grid;
+  grid-template-areas: 'brand search actions';
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
   width: 100%;
   max-width: 1360px;
   margin: 0 auto;
   padding: 16px 28px;
 }
 
+.topbar-head {
+  display: contents;
+}
+
 .brand {
   display: inline-flex;
+  grid-area: brand;
   align-items: center;
   gap: 11px;
   min-height: 48px;
@@ -320,7 +346,7 @@ svg {
   height: 46px;
   border: 1px solid rgb(var(--accent-rgb) / 0.22);
   border-radius: 14px;
-  background: linear-gradient(145deg, rgb(var(--accent-rgb) / 0.2), rgb(255 255 255 / 0.05));
+  background: linear-gradient(145deg, rgb(var(--accent-rgb) / 0.2), rgb(var(--tint-rgb) / 0.05));
   box-shadow: 0 10px 28px rgb(var(--accent-rgb) / 0.12);
   color: var(--accent);
 }
@@ -346,18 +372,12 @@ svg {
   text-transform: uppercase;
 }
 
-.topbar-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
-}
-
 .search {
   position: relative;
-  width: min(100%, 440px);
+  grid-area: search;
+  justify-self: center;
+  width: 100%;
+  max-width: 460px;
   min-width: 0;
 }
 
@@ -368,7 +388,7 @@ svg {
   padding: 4px 4px 4px 13px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgb(255 255 255 / 0.065);
+  background: rgb(var(--tint-rgb) / 0.065);
   transition:
     border-color 180ms ease,
     background 180ms ease,
@@ -377,7 +397,7 @@ svg {
 
 .search-form:focus-within {
   border-color: rgb(var(--accent-rgb) / 0.7);
-  background: rgb(255 255 255 / 0.09);
+  background: rgb(var(--tint-rgb) / 0.09);
   box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.13);
 }
 
@@ -420,7 +440,7 @@ svg {
 
 .search-clear:hover,
 .search-submit:hover {
-  background: rgb(255 255 255 / 0.1);
+  background: rgb(var(--tint-rgb) / 0.1);
   color: var(--text);
 }
 
@@ -441,7 +461,7 @@ svg {
   padding: 6px;
   border: 1px solid var(--line-strong);
   border-radius: 18px;
-  background: #0b1729;
+  background: var(--panel-strong);
   box-shadow: 0 30px 80px rgb(0 0 0 / 0.58);
 }
 
@@ -462,7 +482,7 @@ svg {
 
 .search-result:hover,
 .search-result.is-active {
-  background: rgb(255 255 255 / 0.08);
+  background: rgb(var(--tint-rgb) / 0.08);
 }
 
 .search-result-icon {
@@ -527,7 +547,9 @@ svg {
 
 .quick-actions {
   display: flex;
+  grid-area: actions;
   align-items: center;
+  justify-self: end;
   gap: 8px;
   flex: 0 0 auto;
 }
@@ -540,7 +562,7 @@ svg {
   height: 46px;
   border: 1px solid var(--line);
   border-radius: 15px;
-  background: rgb(255 255 255 / 0.06);
+  background: rgb(var(--tint-rgb) / 0.06);
   color: var(--muted);
   transition:
     border-color 160ms ease,
@@ -555,13 +577,15 @@ svg {
 .icon-button:hover,
 .unit-toggle:hover {
   border-color: var(--line-strong);
-  background: rgb(255 255 255 / 0.1);
+  background: rgb(var(--tint-rgb) / 0.1);
   color: var(--text);
 }
 
 .icon-button:disabled {
   opacity: 0.6;
 }
+
+
 
 .unit-toggle {
   gap: 4px;
@@ -610,9 +634,9 @@ svg {
   border-radius: var(--radius);
   background: linear-gradient(
     150deg,
-    rgb(255 255 255 / 0.095),
-    rgb(255 255 255 / 0.028) 55%,
-    rgb(255 255 255 / 0.045)
+    rgb(var(--tint-rgb) / 0.095),
+    rgb(var(--tint-rgb) / 0.028) 55%,
+    rgb(var(--tint-rgb) / 0.045)
   );
   box-shadow: var(--shadow);
   backdrop-filter: blur(20px);
@@ -736,7 +760,7 @@ svg {
   padding: 7px 11px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.05);
+  background: rgb(var(--tint-rgb) / 0.05);
   color: var(--muted);
   font-size: 0.64rem;
   font-weight: 800;
@@ -849,28 +873,37 @@ svg {
 .refresh-button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   margin-left: auto;
-  min-height: 44px;
-  padding: 8px 12px;
+  min-height: 40px;
+  padding: 8px 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.06);
+  background: rgb(var(--tint-rgb) / 0.06);
   color: var(--text);
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 750;
+  cursor: pointer;
   transition:
     border-color 160ms ease,
-    background 160ms ease;
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
 }
 
-.refresh-button:hover {
+.refresh-button:hover:not(:disabled) {
   border-color: var(--line-strong);
-  background: rgb(255 255 255 / 0.1);
+  background: rgb(var(--tint-rgb) / 0.12);
+  color: var(--accent);
+}
+
+.refresh-button:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 .refresh-button:disabled {
   opacity: 0.65;
+  cursor: wait;
 }
 
 .updated-line {
@@ -968,10 +1001,10 @@ svg {
   top: 50%;
   width: 16px;
   height: 16px;
-  border: 3px solid #0b1729;
+  border: 3px solid var(--panel-strong);
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.12);
+  box-shadow: 0 0 0 3px rgb(var(--tint-rgb) / 0.12);
   transform: translate(-50%, -50%);
 }
 
@@ -989,9 +1022,9 @@ svg {
   gap: 12px;
   margin-bottom: 14px;
   padding: 8px 10px;
-  border: 1px solid rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(var(--tint-rgb) / 0.06);
   border-radius: 10px;
-  background: rgb(255 255 255 / 0.03);
+  background: rgb(var(--tint-rgb) / 0.03);
 }
 
 .aqi-dominant span {
@@ -1019,9 +1052,9 @@ svg {
   flex-direction: column;
   gap: 2px;
   padding: 9px 10px;
-  border: 1px solid rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(var(--tint-rgb) / 0.06);
   border-radius: 12px;
-  background: rgb(255 255 255 / 0.035);
+  background: rgb(var(--tint-rgb) / 0.035);
 }
 
 .aqi-metrics small {
@@ -1044,26 +1077,43 @@ svg {
 
 .scroll-actions {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
 }
 
 .scroll-button {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgb(255 255 255 / 0.05);
+  background: rgb(var(--tint-rgb) / 0.05);
   color: var(--muted);
+  cursor: pointer;
   transition:
     background 160ms ease,
-    color 160ms ease;
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
 }
 
-.scroll-button:hover {
-  background: rgb(255 255 255 / 0.1);
+.scroll-button:hover:not(:disabled) {
+  border-color: var(--line-strong);
+  background: rgb(var(--tint-rgb) / 0.12);
   color: var(--text);
+}
+
+.scroll-button:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.scroll-button:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+  border-color: var(--line);
+  background: rgb(var(--tint-rgb) / 0.02);
+  color: var(--muted-2);
 }
 
 .hourly-strip {
@@ -1090,7 +1140,7 @@ svg {
   scroll-snap-align: start;
   border: 1px solid transparent;
   border-radius: 16px;
-  background: rgb(255 255 255 / 0.032);
+  background: rgb(var(--tint-rgb) / 0.032);
 }
 
 .hour-card.is-now {
@@ -1154,9 +1204,9 @@ svg {
   flex-direction: column;
   gap: 6px;
   padding: 12px;
-  border: 1px solid rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(var(--tint-rgb) / 0.06);
   border-radius: 14px;
-  background: rgb(255 255 255 / 0.03);
+  background: rgb(var(--tint-rgb) / 0.03);
 }
 
 .sun-time span {
@@ -1185,7 +1235,7 @@ svg {
   position: relative;
   height: 7px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.09);
+  background: rgb(var(--tint-rgb) / 0.09);
 }
 
 .daylight-fill {
@@ -1200,7 +1250,7 @@ svg {
   top: 50%;
   width: 15px;
   height: 15px;
-  border: 3px solid #0b1729;
+  border: 3px solid var(--panel-strong);
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 0 0 3px rgb(251 191 36 / 0.2);
@@ -1228,7 +1278,7 @@ svg {
 
 .day-row {
   display: grid;
-  grid-template-columns: minmax(88px, 1.2fr) 30px 48px minmax(120px, 1.5fr);
+  grid-template-columns: minmax(88px, 1.2fr) 34px 48px minmax(120px, 1.5fr);
   align-items: center;
   gap: 10px;
   padding: 10px 4px;
@@ -1236,7 +1286,7 @@ svg {
 }
 
 .day-row + .day-row {
-  border-top: 1px solid rgb(255 255 255 / 0.06);
+  border-top: 1px solid rgb(var(--tint-rgb) / 0.06);
 }
 
 .day-copy {
@@ -1298,7 +1348,7 @@ svg {
   height: 5px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.09);
+  background: rgb(var(--tint-rgb) / 0.09);
 }
 
 .range-fill {
@@ -1322,9 +1372,9 @@ svg {
 .metric-card {
   min-width: 0;
   padding: 13px;
-  border: 1px solid rgb(255 255 255 / 0.07);
+  border: 1px solid rgb(var(--tint-rgb) / 0.07);
   border-radius: 15px;
-  background: rgb(255 255 255 / 0.032);
+  background: rgb(var(--tint-rgb) / 0.032);
 }
 
 .metric-top {
@@ -1387,7 +1437,7 @@ svg {
   height: 24px;
   border: 1px solid var(--line);
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.04);
+  background: rgb(var(--tint-rgb) / 0.04);
 }
 
 .compass-icon svg {
@@ -1430,7 +1480,7 @@ svg {
   padding: 12px 12px 12px 16px;
   border: 1px solid var(--line-strong);
   border-radius: 14px;
-  background: #0b1729;
+  background: var(--panel-strong);
   box-shadow: 0 24px 60px rgb(0 0 0 / 0.5);
   color: var(--text);
   font-size: 0.8rem;
@@ -1445,7 +1495,7 @@ svg {
   height: 30px;
   border: 0;
   border-radius: 8px;
-  background: rgb(255 255 255 / 0.08);
+  background: rgb(var(--tint-rgb) / 0.08);
   color: var(--muted);
 }
 
@@ -1531,8 +1581,8 @@ svg {
 }
 
 .skeleton {
-  background: rgb(255 255 255 / 0.045);
-  border-color: rgb(255 255 255 / 0.06);
+  background: rgb(var(--tint-rgb) / 0.045);
+  border-color: rgb(var(--tint-rgb) / 0.06);
 }
 
 .skeleton::after {
@@ -1542,7 +1592,7 @@ svg {
   background: linear-gradient(
     100deg,
     transparent 20%,
-    rgb(255 255 255 / 0.08) 50%,
+    rgb(var(--tint-rgb) / 0.08) 50%,
     transparent 80%
   );
   transform: translateX(-100%);
@@ -1652,19 +1702,23 @@ svg {
 
 @media (max-width: 900px) {
   .topbar-inner {
-    flex-wrap: wrap;
-    gap: 14px;
-    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 16px 12px;
   }
 
-  .topbar-controls {
-    order: 2;
-    width: 100%;
+  .topbar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
   }
 
   .search {
-    flex: 1;
-    width: auto;
+    width: 100%;
     max-width: none;
   }
 
@@ -1674,10 +1728,6 @@ svg {
 }
 
 @media (max-width: 720px) {
-  .topbar-controls {
-    flex: 1 1 100%;
-  }
-
   .dashboard {
     gap: 14px;
     padding: 14px 14px 12px;
@@ -1719,32 +1769,64 @@ svg {
 
 @media (max-width: 480px) {
   .topbar-inner {
-    padding: 12px 14px;
+    gap: 7px;
+    padding: 8px 12px 10px;
+  }
+
+  .brand {
+    gap: 8px;
+    min-height: 36px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+  }
+
+  .brand-copy strong {
+    font-size: 0.92rem;
+    font-weight: 700;
   }
 
   .brand-copy small {
     display: none;
   }
 
-  .topbar-controls {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .search {
-    order: 1;
-    flex-basis: 100%;
-  }
-
   .quick-actions {
-    order: 2;
-    margin-left: auto;
+    gap: 6px;
+  }
+
+  .icon-button,
+  .unit-toggle {
+    height: 36px;
+    border-radius: 11px;
+  }
+
+  .icon-button {
+    width: 36px;
+  }
+
+  .unit-toggle {
+    padding: 0 9px;
+    font-size: 0.74rem;
+  }
+
+  .search-form {
+    padding: 2px 2px 2px 10px;
+    border-radius: 13px;
+  }
+
+  .search-input {
+    min-height: 38px;
+    font-size: 0.9rem;
   }
 
   .search-clear,
   .search-submit {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
   }
 
   .current-head {
@@ -1802,12 +1884,13 @@ svg {
   }
 
   .scroll-button {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
   }
 
   .day-row {
-    grid-template-columns: minmax(64px, 1fr) 26px 42px minmax(88px, 1.4fr);
+    grid-template-columns: minmax(64px, 1fr) 32px 42px minmax(88px, 1.4fr);
     gap: 7px;
     padding: 9px 0;
   }
